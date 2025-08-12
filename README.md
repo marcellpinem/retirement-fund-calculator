@@ -29,7 +29,7 @@ _(Klik badge untuk mencoba web)_
 
    ```bash
    git clone https://github.com/marcellpinem/retirement-fund-calculator.git
-   cd nama-repo
+   cd retirement-fund-calculator
 
    ```
 
