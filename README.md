@@ -28,7 +28,7 @@ _(Klik badge untuk mencoba web)_
 1. **Clone Repository**
 
    ```bash
-   git clone https://github.com/marcellpinem/nama-repo.git
+   git clone https://github.com/marcellpinem/retirement-fund-calculator.git
    cd nama-repo
 
    ```
