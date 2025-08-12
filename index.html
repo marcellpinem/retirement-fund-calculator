@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kalkulator Dana Pensiun by Marcellino</title>
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="title">
+      <h1>Kalkulator Dana Pensiun</h1>
+      <p>Simulasikan kebutuhan dana pensiun kamu dengan mudah dan cepat.</p>
+    </div>
+
+    <div class="container">
+      <div class="form-pensiun">
+        <div class="form-group">
+          <label>Dana Pensiun Terkumpul</label>
+          <input type="text" id="danaTerkumpul" value="Rp. 500.000.000" required />
+        </div>
+        <div class="form-group">
+          <label>Usia Sekarang</label>
+          <input type="text" id="usiaSekarang" value="30 tahun" required />
+        </div>
+        <div class="form-group">
+          <label>Usia Pensiun</label>
+          <input type="text" id="usiaPensiun" value="60 tahun" required />
+        </div>
+        <div class="form-group">
+          <label>Pengeluaran Bulanan</label>
+          <input type="text" id="pengeluaranBulanan" value="Rp. 5.000.000" required />
+        </div>
+        <div class="form-group">
+          <label>Inflasi Tahunan</label>
+          <input type="text" id="inflasi" value="4%" required />
+        </div>
+        <button type="submit" onclick="hitungDanaPensiun()">Hitung</button>
+      </div>
+
+      <div class="hasil-perhitungan">
+        <div class="result-card">
+          <h2>Total Dana Pensiun Dibutuhkan</h2>
+          <p class="result-amount" id="danaPensiun">Rp. 4.865.096.250</p>
+          <div class="result-detail">
+            <p class="deskripsi-hasil">
+              Kamu akan pensiun dalam <strong id="periode">30 tahun</strong> dan akan membutuhkan pengeluaran bulanan
+              sebesar <strong id="pengeluaranBulananOutput">Rp. 16.216.987</strong>. Oleh karena itu kamu perlu
+              menyiapkan dana sekitar <strong id="targetTabungan">Rp. 4.365.096.250</strong> agar bisa mempertahankan
+              gaya hidup yang sama tanpa penghasilan aktif.
+            </p>
+
+            <p class="profil-tipe">Berikut Rekomedasi Tabungan Bulanan Berdasarkan Profil Resiko Kamu:</p>
+            <ul>
+              <li>
+                <strong class="profil-title">Konservatif</strong>
+                Kamu hanya perlu menabung sebesar <strong id="konservatifMin">Rp. 4.601.143</strong> -
+                <strong id="konservatifMax">Rp. 5.475.080</strong> per bulan dengan target investasi 5% - 6% per tahun.
+              </li>
+              <li>
+                <strong class="profil-title">Moderat</strong>
+                Kamu hanya perlu menabung sebesar <strong id="moderatMin">Rp. 2.211.375</strong> -
+                <strong id="moderatMax">Rp. 3.850.889</strong> per bulan dengan target investasi 7% - 10% per tahun.
+              </li>
+              <li>
+                <strong class="profil-title">Agresif</strong>
+                Kamu hanya perlu menabung sebesar <strong id="agresifMin">Rp. 836.715</strong> -
+                <strong id="agresifMax">Rp. 1.827.737</strong> per bulan dengan target investasi 11% - 15% per tahun.
+              </li>
+            </ul>
+          </div>
+        </div>
+        <p class="note">Catatan: Ini adalah estimasi berdasarkan inflasi dan pengeluaran.</p>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
