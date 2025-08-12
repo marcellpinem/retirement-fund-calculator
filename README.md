@@ -6,7 +6,7 @@ Dibuat menggunakan **HTML**, **CSS**, dan **JavaScript murni**.
 [![Watch the demo](https://img.shields.io/badge/YouTube-Demo-red?logo=youtube)](https://)
 _(Klik badge untuk menonton demo)_
 
-[![Live Demo](https://img.shields.io/badge/Try%20it%20Live-WebApp-blue?logo=netlify)](hhitung-dana-pensiun-marcellino.netlify.app)
+[![Live Demo](https://img.shields.io/badge/Try%20it%20Live-WebApp-blue?logo=netlify)](hitung-dana-pensiun-marcellino.netlify.app)
 _(Klik badge untuk mencoba web)_
 
 ---
