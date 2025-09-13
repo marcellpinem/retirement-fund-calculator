@@ -3,10 +3,10 @@
 Aplikasi web interaktif untuk mensimulasikan kebutuhan dana pensiun dengan mempertimbangkan **inflasi**, **pengeluaran bulanan**, dan **profil risiko investasi**.  
 Dibuat menggunakan **HTML**, **CSS**, dan **JavaScript murni**.
 
-[![Watch the demo](https://img.shields.io/badge/YouTube-Demo-red?logo=youtube)](https://)
+[![Watch the demo](https://img.shields.io/badge/YouTube-Demo-red?logo=youtube)](https://youtu.be/-myeSpzOlFc)
 _(Klik badge untuk menonton demo)_
 
-[![Live Demo](https://img.shields.io/badge/Try%20it%20Live-WebApp-blue?logo=netlify)](hhitung-dana-pensiun-marcellino.netlify.app)
+[![Live Demo](https://img.shields.io/badge/Try%20it%20Live-WebApp-blue?logo=netlify)](https://hitung-dana-pensiun-marcellino.netlify.app/)
 _(Klik badge untuk mencoba web)_
 
 ---
@@ -28,8 +28,8 @@ _(Klik badge untuk mencoba web)_
 1. **Clone Repository**
 
    ```bash
-   git clone https://github.com/marcellpinem/nama-repo.git
-   cd nama-repo
+   git clone https://github.com/marcellpinem/retirement-fund-calculator.git
+   cd retirement-fund-calculator
 
    ```
 
