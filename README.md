@@ -1,45 +1,16 @@
-# 💰 Kalkulator Dana Pensiun
+# React + Vite
 
-Aplikasi web interaktif untuk mensimulasikan kebutuhan dana pensiun dengan mempertimbangkan **inflasi**, **pengeluaran bulanan**, dan **profil risiko investasi**.  
-Dibuat menggunakan **HTML**, **CSS**, dan **JavaScript murni**.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-[![Watch the demo](https://img.shields.io/badge/YouTube-Demo-red?logo=youtube)](https://youtu.be/-myeSpzOlFc)
-_(Klik badge untuk menonton demo)_
+Currently, two official plugins are available:
 
-[![Live Demo](https://img.shields.io/badge/Try%20it%20Live-WebApp-blue?logo=netlify)](https://hitung-dana-pensiun-marcellino.netlify.app/)
-_(Klik badge untuk mencoba web)_
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
----
+## React Compiler
 
-## ✨ Fitur Utama
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-- 📊 **Simulasi Dana Pensiun** berdasarkan usia saat ini, usia pensiun, dan dana yang sudah terkumpul.
-- 📈 **Perhitungan Inflasi Otomatis** untuk memproyeksikan biaya hidup di masa depan.
-- 🧮 **Rekomendasi Tabungan Bulanan** untuk profil investasi:
-  - Konservatif (5% - 6% return tahunan)
-  - Moderat (7% - 10% return tahunan)
-  - Agresif (11% - 15% return tahunan)
-- 🎨 **Desain Responsif** yang nyaman di desktop maupun perangkat mobile.
+## Expanding the ESLint configuration
 
----
-
-## 🚀 Cara Menjalankan
-
-1. **Clone Repository**
-
-   ```bash
-   git clone https://github.com/marcellpinem/retirement-fund-calculator.git
-   cd retirement-fund-calculator
-
-   ```
-
-2. **Buka di Browser**
-
-   - Cukup buka file index.html di browser favorit kamu.
-   - Tidak memerlukan server atau instalasi tambahan.
-
----
-
-## PENULIS
-
-Marcellino Pinem
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.

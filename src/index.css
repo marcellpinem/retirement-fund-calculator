@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+body {
+  font-family: "Manrope", sans-serif;
+}
+
+.custom-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scroll::-webkit-scrollbar-thumb {
+  background-color: rgba(43, 78, 255, 0.2);
+  border-radius: 20px;
+}
+
+/* Chrome, Safari, Edge */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  appearance: textfield;
+}
+
+/* colors: {
+                        "primary": "#2b4eff",
+                        "primary-hover": "#203bbf",
+                        "primary-light": "#eef2ff", 
+                        "background-light": "#ffffff",
+                        "background-dark": "#0f0f23",
+                        "surface-light": "#ffffff",
+                        "surface-gray": "#f8fafc",
+                        "surface-dark": "#1a1a35",
+                        "text-primary": "#1e293b",
+                        "text-secondary": "#64748b",
+                    }, */
