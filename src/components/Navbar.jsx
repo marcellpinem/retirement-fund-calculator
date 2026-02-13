@@ -16,7 +16,7 @@ const Navbar = () => {
             <PiggyBank className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
           </div>
           <NavLink to="/" className="font-extrabold text-lg sm:text-xl tracking-tight text-slate-900">
-            Fin<span className="text-[#2b4eff]">Plan</span>
+            Financial<span className="text-[#2b4eff]">Plan</span>
           </NavLink>
         </div>
 
