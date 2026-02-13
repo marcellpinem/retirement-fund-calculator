@@ -1,5 +1,12 @@
 import { Banknote, TrendingUp, Umbrella, User, Wallet } from "lucide-react";
-import { formatRupiah, formatShort, hitungSelisihUsia, hitungDanaPensiun, hitungProgress } from "../utils/calculator";
+import {
+  formatRupiah,
+  formatShort,
+  hitungSelisihUsia,
+  hitungDanaPensiun,
+  hitungProgress,
+  hitungTabunganBulanan,
+} from "../utils/calculator";
 import { useState } from "react";
 
 const RetirementFund = () => {
@@ -18,9 +25,18 @@ const RetirementFund = () => {
 
   const [result, setResult] = useState({
     selisihUsia: 30,
-    danaPensiun: 4865096250,
-    progress: 25,
-    sisaTargetDana: 3665096250,
+    danaPensiun: 9730192525,
+    progress: 10.28,
+    sisaTargetDana: 8730192525,
+
+    konservatif_lima: 10950160,
+    konservatif_enam: 9202286,
+
+    konservatif_tujuh: 7701778,
+    konservatif_sepuluh: 4422750,
+
+    konservatif_sebelas: 3655476,
+    konservatif_limabelas: 1673431,
   });
 
   const [autoFilledPensiun, setAutoFilledPensiun] = useState(true);
@@ -152,7 +168,6 @@ const RetirementFund = () => {
     );
 
     const progress = hitungProgress(dana, form.dana);
-
     const sisaTargetDana = dana - form.dana;
 
     setResult({
@@ -160,6 +175,25 @@ const RetirementFund = () => {
       danaPensiun: dana,
       progress: progress,
       sisaTargetDana: sisaTargetDana,
+      konservatif_lima: hitungTabunganBulanan(sisaTargetDana, 5, selisih),
+      konservatif_enam: hitungTabunganBulanan(sisaTargetDana, 6, selisih),
+
+      konservatif_tujuh: hitungTabunganBulanan(sisaTargetDana, 7, selisih),
+      konservatif_sepuluh: hitungTabunganBulanan(sisaTargetDana, 10, selisih),
+
+      konservatif_sebelas: hitungTabunganBulanan(sisaTargetDana, 11, selisih),
+      konservatif_limabelas: hitungTabunganBulanan(sisaTargetDana, 15, selisih),
+    });
+
+    console.log({
+      lima: hitungTabunganBulanan(sisaTargetDana, 5, selisih),
+      enam: hitungTabunganBulanan(sisaTargetDana, 6, selisih),
+
+      tujuh: hitungTabunganBulanan(sisaTargetDana, 7, selisih),
+      sepuluh: hitungTabunganBulanan(sisaTargetDana, 10, selisih),
+
+      sebelas: hitungTabunganBulanan(sisaTargetDana, 11, selisih),
+      limabelas: hitungTabunganBulanan(sisaTargetDana, 15, selisih),
     });
   };
 
@@ -388,7 +422,7 @@ const RetirementFund = () => {
                   </p>
 
                   <p className="text-base sm:text-lg font-bold text-slate-900 mb-0.5 sm:mb-1">
-                    Rp {formatShort(4600000)} – {formatShort(5400000)}
+                    Rp {formatShort(result.konservatif_enam)} – {formatShort(result.konservatif_lima)}
                   </p>
 
                   <p className="text-[10px] sm:text-xs text-slate-500">Target return 5% – 6% per tahun</p>
@@ -399,7 +433,7 @@ const RetirementFund = () => {
                     Moderat (Disarankan)
                   </p>
                   <p className="text-base sm:text-lg font-bold text-slate-900 mb-0.5 sm:mb-1">
-                    Rp {formatShort(4600000)} – {formatShort(5400000)}
+                    Rp {formatShort(result.konservatif_sepuluh)} – {formatShort(result.konservatif_tujuh)}
                   </p>
                   <p className="text-[10px] sm:text-xs text-slate-500">Target return 7% – 10% per tahun</p>
                 </div>
@@ -409,7 +443,7 @@ const RetirementFund = () => {
                     Agresif
                   </p>
                   <p className="text-base sm:text-lg font-bold text-slate-900 mb-0.5 sm:mb-1">
-                    Rp {formatShort(4600000)} – {formatShort(5400000)}
+                    Rp {formatShort(result.konservatif_limabelas)} – {formatShort(result.konservatif_sebelas)}
                   </p>
                   <p className="text-[10px] sm:text-xs text-slate-500">Target return 11% – 15% per tahun</p>
                 </div>

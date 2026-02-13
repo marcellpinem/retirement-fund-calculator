@@ -6,7 +6,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const navStyle = ({ isActive }) =>
-    `transition-colors duration-200 ${isActive ? "text-[#2b4eff]" : "text-slate-500 hover:text-slate-900"}`;
+    `transition-all duration-200 px-4 py-3 rounded-lg ${isActive ? "text-white bg-[#2b4eff] hover:bg-[#203bbf]" : "text-slate-500 hover:text-[#2b4eff]"}`;
 
   return (
     <nav className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-50">
@@ -28,7 +28,7 @@ const Navbar = () => {
           {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
 
-        <div className="hidden md:flex items-center gap-8 lg:gap-12 text-sm font-semibold">
+        <div className="hidden md:flex items-center gap-6 text-sm font-semibold">
           <NavLink to="/pensiun" className={navStyle}>
             Dana Pensiun
           </NavLink>

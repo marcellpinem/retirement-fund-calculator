@@ -36,3 +36,12 @@ export const hitungDanaPensiun = (usiaSekarang, usiaPensiun, inflasi, pengeluara
 export const hitungProgress = (danaPensiun, tabunganSaatIni) => {
   return (tabunganSaatIni / danaPensiun) * 100;
 };
+
+export function hitungTabunganBulanan(targetDanaPensiun, annualReturn, tahun) {
+  const r = annualReturn / 100;
+  const n = tahun;
+
+  const pmt = targetDanaPensiun / ((Math.pow(1 + r, n) - 1) / r);
+
+  return Math.floor(pmt / 12);
+}
