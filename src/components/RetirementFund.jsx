@@ -135,7 +135,11 @@ const RetirementFund = () => {
   };
 
   const isFormValid =
-    form.usiaSekarang !== "" && form.usiaPensiun !== "" && form.pengeluaran !== "" && form.dana !== "";
+    form.usiaSekarang !== "" &&
+    form.usiaPensiun !== "" &&
+    form.pengeluaran !== "" &&
+    form.dana !== "" &&
+    form.inflasi !== "";
 
   const handleButton = () => {
     const selisih = hitungSelisihUsia(Number(form.usiaSekarang), Number(form.usiaPensiun));
