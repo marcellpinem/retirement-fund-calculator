@@ -23,21 +23,7 @@ const RetirementFund = () => {
     inflasi: "",
   });
 
-  const [result, setResult] = useState({
-    selisihUsia: 30,
-    danaPensiun: 9730192525,
-    progress: 10.28,
-    sisaTargetDana: 8730192525,
-
-    konservatif_lima: 10950160,
-    konservatif_enam: 9202286,
-
-    konservatif_tujuh: 7701778,
-    konservatif_sepuluh: 4422750,
-
-    konservatif_sebelas: 3655476,
-    konservatif_limabelas: 1673431,
-  });
+  const [result, setResult] = useState(null);
 
   const [autoFilledPensiun, setAutoFilledPensiun] = useState(true);
 
@@ -184,74 +170,65 @@ const RetirementFund = () => {
       konservatif_sebelas: hitungTabunganBulanan(sisaTargetDana, 11, selisih),
       konservatif_limabelas: hitungTabunganBulanan(sisaTargetDana, 15, selisih),
     });
-
-    console.log({
-      lima: hitungTabunganBulanan(sisaTargetDana, 5, selisih),
-      enam: hitungTabunganBulanan(sisaTargetDana, 6, selisih),
-
-      tujuh: hitungTabunganBulanan(sisaTargetDana, 7, selisih),
-      sepuluh: hitungTabunganBulanan(sisaTargetDana, 10, selisih),
-
-      sebelas: hitungTabunganBulanan(sisaTargetDana, 11, selisih),
-      limabelas: hitungTabunganBulanan(sisaTargetDana, 15, selisih),
-    });
   };
 
   return (
     <>
       <title>Kalkulator Pensiun</title>
 
-      <main className="flex flex-col lg:flex-row min-h-[calc(100vh-4rem)] sm:min-h-[calc(100vh-5rem)] bg-gray-50">
+      <main
+        className={`flex flex-col lg:flex-row items-center ${!result ? "lg:justify-center" : ""} min-h-full p-5 lg:py-0 gap-5 bg-gray-200`}
+      >
         {/* FORM SECTION */}
-        <section className="w-full lg:w-1/3 bg-white flex flex-col overflow-y-auto p-4 sm:p-6 lg:p-10">
+        <section className="w-full max-w-180 lg:w-1/3 h-full bg-white rounded-xl p-4 sm:p-6 lg:p-10">
           <div className="mb-4 sm:mb-5">
-            <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 mb-2 tracking-tight text-center md:text-start">
-              Kalkulator Dana Pensiun
+            <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 mb-2 tracking-tight text-center lg:text-start">
+              Kalkulator Pensiun
             </h1>
-            <p className="text-slate-500 text-xs sm:text-sm leading-relaxed tracking-wide text-center md:text-start">
-              Mulai rencanakan kebebasan finansial Anda.
-              <span className="hidden sm:inline"> Masukkan data keuangan saat ini untuk simulasi yang akurat.</span>
+
+            <p className="text-slate-500 text-xs sm:text-sm leading-relaxed tracking-wide text-center lg:text-start">
+              Mulai rencanakan kebebasan finansial hari tua anda
             </p>
           </div>
 
-          <form className="space-y-5 sm:space-y-6 lg:space-y-8 w-full">
+          <form className="w-full space-y-5 sm:space-y-6 lg:space-y-8">
             {/* Dana Pensiun Terkumpul */}
             <div className="group">
               <label className="block text-xs sm:text-sm font-bold text-slate-700 mb-2 sm:mb-3">
                 Dana Pensiun Terkumpul
               </label>
+
               <div className="relative flex items-center shadow-sm rounded-xl transition-all focus-within:shadow-lg focus-within:ring-2 focus-within:ring-[#2b4eff]/20">
                 <div className="absolute left-3 sm:left-4 w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-slate-50 text-slate-400 flex items-center justify-center">
-                  <Wallet className="h-4 w-4 sm:h-5 sm:w-5" />
+                  <Wallet className="" />
                 </div>
-                <span className="absolute left-12 sm:left-16 text-slate-400 font-semibold border-r border-slate-200 pr-2 sm:pr-3 py-1 text-sm sm:text-base">
+
+                <span className="absolute left-12 sm:left-16 text-slate-400 font-semibold border-r borderslate-200 pr-2 sm:pr-3 py-1 text-sm sm:text-base">
                   Rp
                 </span>
 
                 <input
-                  name="dana"
+                  className="w-full bg-white border border-slate-200 rounded-xl py-2.5 sm:py-3 pl-21 sm:pl-28 pr-3 sm:pr-4 text-slate-900 font-bold text-base sm:text-lg focus:outline-none focus:border-[#2b4eff] transition-colors"
                   type="text"
+                  inputMode="numeric"
+                  name="dana"
                   value={form.dana ? formatRupiah(form.dana) : ""}
                   onChange={handleCurrencyChange}
                   placeholder="0"
-                  className="w-full bg-white border border-slate-200 rounded-xl py-2.5 sm:py-3 pl-20 sm:pl-28 pr-3 sm:pr-4 text-slate-900 font-bold text-base sm:text-lg focus:outline-none focus:border-[#2b4eff] transition-colors"
-                  required
                 />
               </div>
             </div>
 
             {/* Usia */}
-            <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:gap-4">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4">
               <div className="group">
                 <label className="block text-xs sm:text-sm font-bold text-slate-700 mb-2 sm:mb-3">Usia Sekarang</label>
-                <div
-                  className={`relative flex items-center shadow-sm rounded-xl transition-all focus-within:shadow-lg focus-within:ring-2 focus-within:ring-[#2b4eff]/20`}
-                >
+                <div className="relative flex items-center shadow-sm rounded-xl transition-all focus-within:shadow-lg focus-within:ring-2 focus-within:ring-[#2b4eff]/20">
                   <div className="absolute left-3 sm:left-4 text-slate-400">
                     <User className="h-4 w-4 sm:h-5 sm:w-5" />
                   </div>
                   <input
-                    className={`w-full bg-white border border-slate-200 focus:border-[#2b4eff] rounded-xl py-2.5 sm:py-3 pl-10 sm:pl-12 pr-14 sm:pr-16 text-slate-900 font-bold text-base sm:text-lg focus:outline-none transition-colors`}
+                    className="w-full bg-white border border-slate-200 focus:border-[#2b4eff] rounded-xl py-2.5 sm:py-3 pl-10 sm:pl-12 pr-14 sm:pr-16 text-slate-900 font-bold text-base sm:text-lg focus:outline-none transition-colors"
                     type="text"
                     inputMode="numeric"
                     value={form.usiaSekarang}
@@ -268,14 +245,12 @@ const RetirementFund = () => {
 
               <div className="group">
                 <label className="block text-xs sm:text-sm font-bold text-slate-700 mb-2 sm:mb-3">Usia Pensiun</label>
-                <div
-                  className={`relative flex items-center shadow-sm rounded-xl transition-all focus-within:shadow-lg focus-within:ring-2 focus-within:ring-[#2b4eff]/20`}
-                >
+                <div className="relative flex items-center shadow-sm rounded-xl transition-all focus-within:shadow-lg focus-within:ring-2 focus-within:ring-[#2b4eff]/20">
                   <div className="absolute left-3 sm:left-4 text-slate-400">
                     <Umbrella className="h-4 w-4 sm:h-5 sm:w-5" />
                   </div>
                   <input
-                    className={`w-full bg-white border border-slate-200 focus:border-[#2b4eff] rounded-xl py-2.5 sm:py-3 pl-10 sm:pl-12 pr-14 sm:pr-16 text-slate-900 font-bold text-base sm:text-lg focus:outline-none transition-colors`}
+                    className="w-full bg-white border border-slate-200 focus:border-[#2b4eff] rounded-xl py-2.5 sm:py-3 pl-10 sm:pl-12 pr-14 sm:pr-16 text-slate-900 font-bold text-base sm:text-lg focus:outline-none transition-colors"
                     type="text"
                     inputMode="numeric"
                     value={form.usiaPensiun}
@@ -300,12 +275,15 @@ const RetirementFund = () => {
                 <div className="absolute left-3 sm:left-4 w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-slate-50 text-slate-400 flex items-center justify-center">
                   <Banknote className="h-4 w-4 sm:h-5 sm:w-5" />
                 </div>
+
                 <span className="absolute left-12 sm:left-16 text-slate-400 font-semibold border-r border-slate-200 pr-2 sm:pr-3 py-1 text-sm sm:text-base">
                   Rp
                 </span>
+
                 <input
                   name="pengeluaran"
                   type="text"
+                  inputMode="numeric"
                   value={form.pengeluaran ? formatRupiah(form.pengeluaran) : ""}
                   onChange={handleCurrencyChange}
                   placeholder="5.000.000"
@@ -352,105 +330,106 @@ const RetirementFund = () => {
           </form>
         </section>
 
-        {/* RESULTS SECTION */}
-        <section className="flex lg:w-2/3 bg-slate-50/50 flex-col p-4 sm:p-5 lg:p-6 overflow-y-auto">
-          <div className="w-full space-y-4 sm:space-y-5">
-            {/* Hero Target */}
-            <div className="bg-white rounded-xl sm:rounded-2xl p-5 sm:p-6 lg:p-8 shadow-sm border border-slate-100">
-              <div className="flex items-center justify-between mb-3 sm:mb-4">
-                <h3 className="text-slate-500 text-[10px] sm:text-xs font-bold uppercase tracking-widest">
-                  Target Dana Pensiun
-                </h3>
-                <div className="text-[10px] sm:text-xs font-semibold text-[#2b4eff] bg-[#2b4eff]/10 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full">
-                  {result.selisihUsia} Tahun Lagi
+        {result && (
+          <section className="w-full lg:w-2/3 h-full flex flex-col rounded-xl animate-slide-in">
+            <div className="w-full space-y-4 sm:space-y-7">
+              {/* Hero Target */}
+              <div className="bg-white rounded-xl sm:rounded-2xl p-5 sm:p-6 lg:p-8 shadow-sm border border-slate-100">
+                <div className="flex items-center justify-between mb-3 sm:mb-4">
+                  <h3 className="text-slate-500 text-[10px] sm:text-xs font-bold uppercase tracking-widest">
+                    Target Dana Pensiun
+                  </h3>
+                  <div className="text-[10px] sm:text-xs font-semibold text-[#2b4eff] bg-[#2b4eff]/10 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full">
+                    {result.selisihUsia} Tahun Lagi
+                  </div>
                 </div>
-              </div>
 
-              <div className="flex items-baseline gap-2 sm:gap-3">
-                <span className="text-lg sm:text-xl lg:text-2xl font-bold text-slate-400">Rp</span>
-                <span className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-extrabold tracking-tight text-slate-900 leading-none">
-                  {formatRupiah(result.danaPensiun)}
-                </span>
-              </div>
-
-              <p className="mt-2 sm:mt-3 text-xs sm:text-sm text-slate-500">
-                Estimasi kebutuhan total agar gaya hidup tetap terjaga saat pensiun.
-              </p>
-
-              <div className="mt-4 sm:mt-6">
-                <div className="flex justify-between text-[10px] sm:text-xs text-slate-500 mb-2">
-                  <span>Dana Saat Ini</span>
-                  <span>{result.progress.toFixed(2)}%</span>
+                <div className="flex items-baseline gap-2 sm:gap-3">
+                  <span className="text-lg sm:text-xl lg:text-2xl font-bold text-slate-400">Rp</span>
+                  <span className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-extrabold tracking-tight text-slate-900 leading-none">
+                    {formatRupiah(result.danaPensiun)}
+                  </span>
                 </div>
-                <div className="h-2 sm:h-3 bg-slate-100 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-[#2b4eff]  rounded-full transition-all duration-500"
-                    style={{ width: `${result.progress}%` }}
-                  ></div>
-                </div>
-              </div>
-            </div>
 
-            {/* Gap Card */}
-            <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 shadow-sm border border-slate-100 flex items-center justify-between gap-3">
-              <div className="flex-1 min-w-0">
-                <h3 className="text-slate-500 text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-1">
-                  Sisa Target Dana
-                </h3>
-                <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-900 truncate">
-                  {formatRupiah(result.sisaTargetDana)}
-                </div>
-                <p className="text-xs sm:text-sm text-slate-500 mt-0.5 sm:mt-1">
-                  Selisih yang perlu kamu akumulasi dalam {result.selisihUsia} tahun.
+                <p className="mt-2 sm:mt-3 text-xs sm:text-sm text-slate-500">
+                  Estimasi kebutuhan total agar gaya hidup tetap terjaga saat pensiun.
                 </p>
+
+                <div className="mt-4 sm:mt-6">
+                  <div className="flex justify-between text-[10px] sm:text-xs text-slate-500 mb-2">
+                    <span>Dana Saat Ini</span>
+                    <span>{result.progress.toFixed(2)}%</span>
+                  </div>
+                  <div className="h-2 sm:h-3 bg-slate-100 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-[#2b4eff]  rounded-full transition-all duration-500"
+                      style={{ width: `${result.progress}%` }}
+                    ></div>
+                  </div>
+                </div>
               </div>
-              <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-[#2b4eff]/10 flex items-center justify-center text-[#2b4eff] shrink-0">
-                <TrendingUp className="h-5 w-5 sm:h-6 sm:w-6" />
+
+              {/* Gap Card */}
+              <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 shadow-sm border border-slate-100 flex items-center justify-between gap-3">
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-slate-500 text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-1">
+                    Sisa Target Dana
+                  </h3>
+                  <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-900 truncate">
+                    {formatRupiah(result.sisaTargetDana)}
+                  </div>
+                  <p className="text-xs sm:text-sm text-slate-500 mt-0.5 sm:mt-1">
+                    Selisih yang perlu kamu akumulasi dalam {result.selisihUsia} tahun.
+                  </p>
+                </div>
+                <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-[#2b4eff]/10 flex items-center justify-center text-[#2b4eff] shrink-0">
+                  <TrendingUp className="h-5 w-5 sm:h-6 sm:w-6" />
+                </div>
+              </div>
+
+              {/* Risk Profile */}
+              <div className="bg-white rounded-xl sm:rounded-2xl p-5 sm:p-6 lg:p-8 shadow-sm border border-slate-100 select-none">
+                <h3 className="text-base sm:text-lg font-bold text-slate-900 mb-4 sm:mb-6">
+                  Rekomendasi Tabungan Bulanan
+                </h3>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
+                  <div className="border border-slate-200 hover:border-[#2b4eff] rounded-xl p-4 sm:p-5 shadow-md hover:ring-4 hover:ring-[#2b4eff]/10 transition-all duration-200">
+                    <p className="text-[10px] sm:text-xs uppercase tracking-widest text-slate-500 mb-1 sm:mb-2">
+                      Konservatif
+                    </p>
+
+                    <p className="text-base sm:text-lg font-bold text-slate-900 mb-0.5 sm:mb-1">
+                      Rp {formatShort(result.konservatif_enam)} – {formatShort(result.konservatif_lima)}
+                    </p>
+
+                    <p className="text-[10px] sm:text-xs text-slate-500">Target return 5% – 6% per tahun</p>
+                  </div>
+
+                  <div className="border border-slate-200 hover:border-[#2b4eff] rounded-xl p-4 sm:p-5 shadow-md hover:ring-4 hover:ring-[#2b4eff]/10 transition-all duration-200">
+                    <p className="text-[10px] sm:text-xs uppercase font-extrabold  tracking-widest text-[#2b4eff] mb-1 sm:mb-2">
+                      Moderat (Disarankan)
+                    </p>
+                    <p className="text-base sm:text-lg font-bold text-slate-900 mb-0.5 sm:mb-1">
+                      Rp {formatShort(result.konservatif_sepuluh)} – {formatShort(result.konservatif_tujuh)}
+                    </p>
+                    <p className="text-[10px] sm:text-xs text-slate-500">Target return 7% – 10% per tahun</p>
+                  </div>
+
+                  <div className="border border-slate-200 hover:border-[#2b4eff] rounded-xl p-4 sm:p-5 shadow-md hover:ring-4 hover:ring-[#2b4eff]/10 transition-all duration-200">
+                    <p className="text-[10px] sm:text-xs uppercase tracking-widest text-slate-500 mb-1 sm:mb-2">
+                      Agresif
+                    </p>
+                    <p className="text-base sm:text-lg font-bold text-slate-900 mb-0.5 sm:mb-1">
+                      Rp {formatShort(result.konservatif_limabelas)} – {formatShort(result.konservatif_sebelas)}
+                    </p>
+                    <p className="text-[10px] sm:text-xs text-slate-500">Target return 11% – 15% per tahun</p>
+                  </div>
+                </div>
               </div>
             </div>
-
-            {/* Risk Profile */}
-            <div className="bg-white rounded-xl sm:rounded-2xl p-5 sm:p-6 lg:p-8 shadow-sm border border-slate-100">
-              <h3 className="text-base sm:text-lg font-bold text-slate-900 mb-4 sm:mb-6">
-                Rekomendasi Tabungan Bulanan
-              </h3>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
-                <div className="border border-slate-200 rounded-xl p-4 sm:p-5 hover:shadow-md transition">
-                  <p className="text-[10px] sm:text-xs uppercase tracking-widest text-slate-500 mb-1 sm:mb-2">
-                    Konservatif
-                  </p>
-
-                  <p className="text-base sm:text-lg font-bold text-slate-900 mb-0.5 sm:mb-1">
-                    Rp {formatShort(result.konservatif_enam)} – {formatShort(result.konservatif_lima)}
-                  </p>
-
-                  <p className="text-[10px] sm:text-xs text-slate-500">Target return 5% – 6% per tahun</p>
-                </div>
-
-                <div className="border-2 border-[#2b4eff] rounded-xl p-4 sm:p-5 shadow-md">
-                  <p className="text-[10px] sm:text-xs uppercase tracking-widest text-[#2b4eff] mb-1 sm:mb-2">
-                    Moderat (Disarankan)
-                  </p>
-                  <p className="text-base sm:text-lg font-bold text-slate-900 mb-0.5 sm:mb-1">
-                    Rp {formatShort(result.konservatif_sepuluh)} – {formatShort(result.konservatif_tujuh)}
-                  </p>
-                  <p className="text-[10px] sm:text-xs text-slate-500">Target return 7% – 10% per tahun</p>
-                </div>
-
-                <div className="border border-slate-200 rounded-xl p-4 sm:p-5 hover:shadow-md transition">
-                  <p className="text-[10px] sm:text-xs uppercase tracking-widest text-slate-500 mb-1 sm:mb-2">
-                    Agresif
-                  </p>
-                  <p className="text-base sm:text-lg font-bold text-slate-900 mb-0.5 sm:mb-1">
-                    Rp {formatShort(result.konservatif_limabelas)} – {formatShort(result.konservatif_sebelas)}
-                  </p>
-                  <p className="text-[10px] sm:text-xs text-slate-500">Target return 11% – 15% per tahun</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+          </section>
+        )}
       </main>
     </>
   );

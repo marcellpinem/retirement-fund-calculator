@@ -6,11 +6,11 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const navStyle = ({ isActive }) =>
-    `transition-all duration-200 px-4 py-3 rounded-lg ${isActive ? "text-white bg-[#2b4eff] hover:bg-[#203bbf]" : "text-slate-500 hover:text-[#2b4eff]"}`;
+    `transition-all duration-200 px-4 py-3 rounded-lg ${isActive ? "text-white bg-[#2b4eff] hover:bg-[#203bbf]" : "text-slate-500 hover:bg-[#2b4eff]/10 hover:text-[#2b4eff]"}`;
 
   return (
     <nav className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-50">
-      <div className="flex h-16 sm:h-20 px-4 sm:px-6 lg:px-12 items-center justify-between">
+      <div className="flex h-20 px-4 sm:px-6 lg:px-12 items-center justify-between">
         <div className="flex items-center gap-2 sm:gap-3">
           <div className="w-8 h-8 sm:w-10 sm:h-10 bg-[#2b4eff] rounded-lg flex items-center justify-center shadow-lg shadow-[#2b4eff]/30">
             <PiggyBank className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
@@ -22,13 +22,13 @@ const Navbar = () => {
 
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden p-2 hover:bg-slate-50 rounded-lg transition-colors"
+          className="lg:hidden p-2 hover:bg-slate-50 rounded-lg transition-colors"
           aria-label="Toggle menu"
         >
           {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
 
-        <div className="hidden md:flex items-center gap-6 text-sm font-semibold">
+        <div className="hidden lg:flex items-center gap-6 text-sm font-semibold">
           <NavLink to="/pensiun" className={navStyle}>
             Dana Pensiun
           </NavLink>
@@ -43,7 +43,7 @@ const Navbar = () => {
 
       {/* Backdrop dengan fade */}
       <div
-        className={`fixed inset-0 bg-black/20 md:hidden transition-opacity duration-300 ${
+        className={`fixed inset-0 bg-black/20 lg:hidden transition-opacity duration-300 ${
           isOpen ? "opacity-100 z-40" : "opacity-0 pointer-events-none"
         }`}
         onClick={() => setIsOpen(false)}
@@ -51,7 +51,7 @@ const Navbar = () => {
 
       {/* Menu dengan slide down */}
       <div
-        className={`absolute top-full left-0 right-0 bg-white border-b border-slate-100 shadow-lg md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+        className={`absolute top-full left-0 right-0 bg-white border-b border-slate-100 shadow-lg lg:hidden overflow-hidden transition-all duration-300 ease-in-out ${
           isOpen ? "max-h-96 opacity-100 z-50" : "max-h-0 opacity-0"
         }`}
       >
