@@ -214,7 +214,7 @@ const RetirementFund = () => {
                   name="dana"
                   value={form.dana ? formatRupiah(form.dana) : ""}
                   onChange={handleCurrencyChange}
-                  placeholder="0"
+                  placeholder="500.000.000"
                 />
               </div>
             </div>
@@ -227,6 +227,7 @@ const RetirementFund = () => {
                   <div className="absolute left-3 sm:left-4 text-slate-400">
                     <User className="h-4 w-4 sm:h-5 sm:w-5" />
                   </div>
+
                   <input
                     className="w-full bg-white border border-slate-200 focus:border-[#2b4eff] rounded-xl py-2.5 sm:py-3 pl-10 sm:pl-12 pr-14 sm:pr-16 text-slate-900 font-bold text-base sm:text-lg focus:outline-none transition-colors"
                     type="text"
@@ -237,6 +238,7 @@ const RetirementFund = () => {
                     placeholder="30"
                     required
                   />
+
                   <span className="absolute right-2 sm:right-4 text-slate-400 text-xs sm:text-sm font-semibold bg-slate-50 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded">
                     Tahun
                   </span>

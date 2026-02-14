@@ -4,6 +4,7 @@ import App from "./App.jsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar.jsx";
 import RetirementFund from "./components/RetirementFund.jsx";
+import EducationFund from "./components/EducationFund.jsx";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
@@ -14,7 +15,7 @@ createRoot(document.getElementById("root")).render(
         <Routes>
           <Route path="/" element={<App />} />
           <Route path="/pensiun" element={<RetirementFund />} />
-          <Route path="/pendidikan" element={<App />} />
+          <Route path="/pendidikan" element={<EducationFund />} />
           <Route path="/darurat" element={<App />} />
         </Routes>
       </div>
