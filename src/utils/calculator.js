@@ -1,10 +1,8 @@
-// Format full rupiah (5.000.000)
 export const formatRupiah = (value) =>
   new Intl.NumberFormat("id-ID", {
     minimumFractionDigits: 0,
   }).format(value);
 
-// Format short (2.2jt, 836rb) pembulatan ke atas
 export const formatShort = (value) => {
   if (value >= 1_000_000_000) {
     return Math.ceil(value / 1_000_000_000) + "M";

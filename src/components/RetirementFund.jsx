@@ -186,7 +186,7 @@ const RetirementFund = () => {
               Kalkulator Pensiun
             </h1>
 
-            <p className="text-slate-500 text-xs sm:text-sm leading-relaxed tracking-wide text-center lg:text-start">
+            <p className={`text-slate-500 text-xs sm:text-sm leading-relaxed tracking-wide text-center lg:text-start`}>
               Mulai rencanakan kebebasan finansial hari tua anda
             </p>
           </div>
@@ -330,6 +330,7 @@ const RetirementFund = () => {
           </form>
         </section>
 
+        {/* RESULT SECTION */}
         {result && (
           <section className="w-full lg:w-2/3 h-full flex flex-col rounded-xl animate-slide-in">
             <div className="w-full space-y-4 sm:space-y-7">
