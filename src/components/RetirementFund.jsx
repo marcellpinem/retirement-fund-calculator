@@ -411,7 +411,7 @@ const RetirementFund = () => {
 
                   <div className="border border-slate-200 hover:border-[#2b4eff] rounded-xl p-4 sm:p-5 shadow-md hover:ring-4 hover:ring-[#2b4eff]/10 transition-all duration-200">
                     <p className="text-[10px] sm:text-xs uppercase font-extrabold  tracking-widest text-[#2b4eff] mb-1 sm:mb-2">
-                      Moderat (Disarankan)
+                      Moderat
                     </p>
                     <p className="text-base sm:text-lg font-bold text-slate-900 mb-0.5 sm:mb-1">
                       Rp {formatShort(result.konservatif_sepuluh)} – {formatShort(result.konservatif_tujuh)}

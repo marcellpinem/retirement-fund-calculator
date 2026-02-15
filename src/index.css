@@ -2,6 +2,7 @@
 
 @theme {
   --breakpoint-lg: 1050px;
+  --breakpoint-xl: 1300px;
 }
 
 body {

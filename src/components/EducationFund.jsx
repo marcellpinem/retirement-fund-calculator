@@ -1,18 +1,22 @@
-import { History, GraduationCap, Banknote } from "lucide-react";
-
+import { History, GraduationCap, TrendingUp } from "lucide-react";
 import { formatRupiah } from "../utils/calculator";
 import { useState } from "react";
 
 const EducationFund = () => {
   const MAX_BIAYA = 1_000_000_000;
+  const jenjangOptions = ["SD", "SMP", "SMA", "D1", "D2", "D3", "D4", "S1", "S2", "S3"];
+
+  const [metodeActive, setMetodeActive] = useState("bulan");
 
   const [form, setForm] = useState({
     masuk_dalam: "",
     jenjang: "",
     uang_pangkal: "",
+    spp: "",
+    inflasi: "",
+    dana_saat_ini: "",
+    metode: "",
   });
-
-  const jenjangOptions = ["SD", "SMP", "SMA", "D1", "D2", "D3", "D4", "S1", "S2", "S3"];
 
   const handleJenjangChange = (e) => {
     setForm((prev) => ({
@@ -33,7 +37,7 @@ const EducationFund = () => {
       numeric = Math.min(numeric, MAX_BIAYA);
     }
 
-    if (name === "dana") {
+    if (name === "dana_saat_ini") {
       numeric = Math.min(numeric, MAX_BIAYA);
     }
 
@@ -43,99 +47,400 @@ const EducationFund = () => {
     }));
   };
 
+  const handleMetodePembayaran = (value) => {
+    setMetodeActive(value);
+
+    setForm((prev) => ({
+      ...prev,
+      metode: value,
+    }));
+  };
+
+  const handleInflasi = (e) => {
+    const raw = e.target.value.replace(/\D/g, "");
+
+    setForm((prev) => ({
+      ...prev,
+      inflasi: raw,
+    }));
+  };
+
+  const validateInflasi = () => {
+    setForm((prev) => {
+      if (!prev.inflasi) return prev;
+
+      let value = Number(prev.inflasi);
+
+      if (value > 100) value = 100;
+
+      return {
+        ...prev,
+        inflasi: Number(value),
+      };
+    });
+  };
+
+  const isFormValid =
+    form.masuk_dalam !== "" &&
+    form.jenjang !== "" &&
+    form.uang_pangkal !== "" &&
+    form.spp !== "" &&
+    form.inflasi !== "" &&
+    form.dana_saat_ini !== "";
+
+  const handleButton = () => {
+    console.log({ form });
+  };
+
   return (
     <>
-      <main className="flex flex-col lg:flex-row items-center min-h-full p-5 lg:py-0 gap-5 bg-gray-200">
-        <section className="border w-full max-w-180 lg:w-1/3 h-full bg-white rounded-xl p-4 sm:p-6 lg:p-10">
-          <div className="mb-4 sm:mb-5">
-            <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 mb-2 tracking-tight text-center lg:text-start">
-              Kalkulator Pendidikan
-            </h1>
+      <main className="min-h-full bg-gray-200 overflow-hidden flex flex-col lg:flex-row gap-0 lg:gap-5">
+        {/* Form Section */}
+        <section className="p-5 lg:pr-0 w-full lg:w-3/8 flex justify-center">
+          <div className="bg-white rounded-xl p-4 sm:p-6 lg:p-10 max-w-180 flex flex-col">
+            {/* Form Header */}
+            <div className="mb-4 sm:mb-5">
+              <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 mb-1 lg:mb-2 tracking-tight text-center lg:text-start">
+                Kalkulator Pendidikan
+              </h1>
 
-            <p className={`text-slate-500 text-xs sm:text-sm leading-relaxed tracking-wide text-center lg:text-start`}>
-              Rencanakan biaya pendidikan anak secara terstruktur
-            </p>
-          </div>
+              <p className="text-slate-500 text-xs sm:text-sm leading-relaxed tracking-wide text-center lg:text-start">
+                Rencanakan biaya pendidikan anak sekarang!
+              </p>
+            </div>
 
-          <form className="w-full space-y-5 sm:space-y-6 lg:space-y-8">
-            <div className="grid grid-cols-2 gap-3 sm:gap-4">
-              <div className="group">
-                <label className="block text-xs sm:text-sm font-bold text-slate-700 mb-2 sm:mb-3">
-                  Masuk sekolah dalam
-                </label>
+            <form className="flex flex-col flex-1 space-y-5 sm:space-y-6 lg:space-y-8 justify-center xl:justify-start">
+              {/* Jenjang Pendidikan & Mulai Pendidikan dalam */}
+              <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                {/* Jenjang Pendidikan */}
+                <div className="group">
+                  <label className="block text-xs sm:text-sm font-bold text-slate-700 mb-2 sm:mb-3">
+                    Jenjang Pendidikan
+                  </label>
 
-                <div className="relative flex items-center shadow-sm rounded-xl transition-all focus-within:shadow-lg focus-within:ring-2 focus-within:ring-[#2b4eff]/20">
-                  <div className="absolute left-3 sm:left-4 text-slate-400">
-                    <History className="h-4 w-4 sm:h-5 sm:w-5" />
+                  <div className="relative flex items-center shadow-sm rounded-xl transition-all focus-within:shadow-lg focus-within:ring-2 focus-within:ring-[#2b4eff]/20">
+                    <div className="absolute left-3 sm:left-4 text-slate-400">
+                      <GraduationCap className="h-4 w-4 sm:h-5 sm:w-5" />
+                    </div>
+
+                    <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-slate-400">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </div>
+
+                    <select
+                      onChange={handleJenjangChange}
+                      className={`w-full bg-transparent border border-slate-200 focus:border-[#2b4eff] rounded-xl py-2.5 sm:py-3 pl-10 sm:pl-12 ${form.jenjang === "" ? "text-[#868b95]" : "text-slate-900"} font-bold text-base sm:text-lg focus:outline-none transition-colors appearance-none cursor-pointer tracking-tight`}
+                    >
+                      <option value="">Pilih</option>
+                      {jenjangOptions.map((opt) => (
+                        <option key={opt} value={opt}>
+                          {opt}
+                        </option>
+                      ))}
+                    </select>
                   </div>
+                </div>
 
-                  <input
-                    className="w-full bg-white border border-slate-200 focus:border-[#2b4eff] rounded-xl py-2.5 sm:py-3 pl-10 sm:pl-12 pr-14 sm:pr-16 text-slate-900 font-bold text-base sm:text-lg focus:outline-none transition-colors"
-                    type="text"
-                    inputMode="numeric"
-                    placeholder="10"
-                    required
-                  />
+                {/* Mulai Pendidikan dalam */}
+                <div className="group">
+                  <label className="block text-xs sm:text-sm font-bold text-slate-700 mb-2 sm:mb-3">
+                    Mulai Pendidikan dalam
+                  </label>
 
-                  <span className="absolute right-2 sm:right-4 text-slate-400 text-xs sm:text-sm font-semibold bg-slate-50 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded">
-                    Tahun
-                  </span>
+                  <div className="relative flex items-center shadow-sm rounded-xl transition-all focus-within:shadow-lg focus-within:ring-2 focus-within:ring-[#2b4eff]/20">
+                    <div className="absolute left-3 sm:left-4 text-slate-400">
+                      <History className="h-4 w-4 sm:h-5 sm:w-5" />
+                    </div>
+
+                    <input
+                      className="w-full bg-white border border-slate-200 focus:border-[#2b4eff] rounded-xl py-2.5 sm:py-3 pl-10 sm:pl-12 pr-14 sm:pr-16 text-slate-900 font-bold text-base sm:text-lg focus:outline-none transition-colors"
+                      name="masuk_dalam"
+                      onChange={(e) => {
+                        setForm((prev) => ({
+                          ...prev,
+                          masuk_dalam: Number(e.target.value),
+                        }));
+                      }}
+                      type="text"
+                      inputMode="numeric"
+                      placeholder="10"
+                      maxLength="2"
+                      required
+                    />
+
+                    <span className="absolute right-2 sm:right-4 text-slate-400 text-xs sm:text-sm font-semibold bg-slate-50 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded">
+                      Tahun
+                    </span>
+                  </div>
                 </div>
               </div>
 
+              {/* Uang Pangkal Saat Ini & Biaya SPP Saat Ini */}
+              <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                {/* Uang Pangkal Saat Ini */}
+                <div className="group">
+                  <label className="block text-xs sm:text-sm font-bold text-slate-700 mb-2 sm:mb-3">
+                    Uang Pangkal Saat Ini
+                  </label>
+
+                  <div className="relative flex items-center shadow-sm rounded-xl transition-all focus-within:shadow-lg focus-within:ring-2 focus-within:ring-[#2b4eff]/20">
+                    <span className="absolute left-3 text-slate-400 font-semibold sm:border-r sm:borderslate-200 pr-2 sm:pr-3 py-1 text-sm sm:text-base">
+                      Rp
+                    </span>
+
+                    <input
+                      className="w-full bg-white border border-slate-200 rounded-xl py-2.5 sm:py-3 pl-9  md:pl-15 pr-3 sm:pr-4 text-slate-900 font-bold text-sm sm:text-lg focus:outline-none focus:border-[#2b4eff] transition-colors"
+                      onChange={handleCurrencyChange}
+                      value={form.uang_pangkal ? formatRupiah(form.uang_pangkal) : ""}
+                      name="uang_pangkal"
+                      type="text"
+                      inputMode="numeric"
+                      placeholder="20.000.000"
+                    />
+                  </div>
+                </div>
+
+                {/* Biaya SPP Saat Ini */}
+                <div className="group">
+                  <label className="block text-xs sm:text-sm font-bold text-slate-700 mb-2 sm:mb-3">
+                    Biaya SPP Saat Ini
+                  </label>
+
+                  <div className="relative flex items-center shadow-sm rounded-xl transition-all focus-within:shadow-lg focus-within:ring-2 focus-within:ring-[#2b4eff]/20">
+                    <span className="absolute left-3 text-slate-400 font-semibold sm:border-r sm:borderslate-200 pr-2 sm:pr-3 py-1 text-sm sm:text-base">
+                      Rp
+                    </span>
+
+                    <input
+                      className="w-full bg-white border border-slate-200 rounded-xl py-2.5 sm:py-3 pl-9  md:pl-15 pr-3 sm:pr-4 text-slate-900 font-bold text-sm sm:text-lg focus:outline-none focus:border-[#2b4eff] transition-colors"
+                      onChange={handleCurrencyChange}
+                      value={form.spp ? formatRupiah(form.spp) : ""}
+                      name="spp"
+                      type="text"
+                      inputMode="numeric"
+                      placeholder="20.000.000"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Metode Pembayaran */}
               <div className="group">
                 <label className="block text-xs sm:text-sm font-bold text-slate-700 mb-2 sm:mb-3">
-                  Jenjang Pendidikan
+                  Periode Pembayaran SPP
                 </label>
 
-                <div className="relative flex items-center shadow-sm rounded-xl transition-all focus-within:shadow-lg focus-within:ring-2 focus-within:ring-[#2b4eff]/20">
-                  <div className="absolute left-3 sm:left-4 text-slate-400">
-                    <GraduationCap className="h-4 w-4 sm:h-5 sm:w-5" />
-                  </div>
-
-                  <select
-                    onChange={handleJenjangChange}
-                    className={`w-full bg-transparent border border-slate-200 focus:border-[#2b4eff] rounded-xl py-2.5 sm:py-3 pl-10 sm:pl-12 ${form.jenjang === "" ? "text-[#868b95]" : "text-slate-900"} font-bold text-base sm:text-lg focus:outline-none transition-colors appearance-none cursor-pointer tracking-tight`}
+                <div className="grid grid-cols-3 py-1 px-1.5 shadow-sm rounded-xl bg-gray-200">
+                  <div
+                    onClick={() => handleMetodePembayaran("bulan")}
+                    className={`${metodeActive === "bulan" ? "text-[#2b4eff] bg-white" : "text-[#64748b] hover:text-slate-900"}  px-2 py-3 flex items-center justify-center rounded-lg  text-xs sm:text-sm tracking-tight font-bold cursor-pointer`}
                   >
-                    <option value="">Pilih Jenjang</option>
-                    {jenjangOptions.map((opt) => (
-                      <option key={opt} value={opt}>
-                        {opt}
-                      </option>
-                    ))}
-                  </select>
+                    Per Bulan
+                  </div>
+                  <div
+                    onClick={() => handleMetodePembayaran("semester")}
+                    className={`${metodeActive === "semester" ? "text-[#2b4eff] bg-white" : "text-[#64748b] hover:text-slate-900"}  px-2 py-3 flex items-center justify-center rounded-lg  text-xs sm:text-sm tracking-tight font-bold cursor-pointer`}
+                  >
+                    Per Semester
+                  </div>
+                  <div
+                    onClick={() => handleMetodePembayaran("tahun")}
+                    className={`${metodeActive === "tahun" ? "text-[#2b4eff] bg-white" : "text-[#64748b] hover:text-slate-900"}  px-2 py-3 flex items-center justify-center rounded-lg  text-xs sm:text-sm tracking-tight font-bold cursor-pointer`}
+                  >
+                    Per Tahun
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="group">
-              <label className="block text-xs sm:text-sm font-bold text-slate-700 mb-2 sm:mb-3">
-                Uang Pangkal / Biaya Masuk Saat Ini
-              </label>
+              {/* Inflasi Tahunan & Dana Saat Ini */}
+              <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                {/* Inflasi Tahunan */}
+                <div className="group">
+                  <label className="block text-xs sm:text-sm font-bold text-slate-700 mb-2 sm:mb-3">
+                    Inflasi Pendidikan
+                  </label>
 
-              <div className="relative flex items-center shadow-sm rounded-xl transition-all focus-within:shadow-lg focus-within:ring-2 focus-within:ring-[#2b4eff]/20">
-                <div className="absolute left-3 sm:left-4 w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-slate-50 text-slate-400 flex items-center justify-center">
-                  <Banknote className="" />
+                  <div className="relative flex items-center shadow-sm rounded-xl transition-all focus-within:shadow-lg focus-within:ring-2 focus-within:ring-[#2b4eff]/20">
+                    <div className="absolute left-3 sm:left-4 text-slate-400">
+                      <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />
+                    </div>
+
+                    <input
+                      className="w-full bg-white border border-slate-200 focus:border-[#2b4eff] rounded-xl py-2.5 sm:py-3 pl-10 sm:pl-12 pr-14 sm:pr-16 text-slate-900 font-bold text-base sm:text-lg focus:outline-none transition-colors"
+                      type="text"
+                      inputMode="numeric"
+                      value={form.inflasi}
+                      onChange={handleInflasi}
+                      onBlur={validateInflasi}
+                      placeholder="15"
+                      maxLength={2}
+                      required
+                    />
+
+                    <span className="absolute right-2 sm:right-4 text-slate-400 text-xs sm:text-sm font-semibold bg-slate-50 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded">
+                      %
+                    </span>
+                  </div>
                 </div>
 
-                <span className="absolute left-12 sm:left-16 text-slate-400 font-semibold border-r borderslate-200 pr-2 sm:pr-3 py-1 text-sm sm:text-base">
-                  Rp
-                </span>
+                {/* Dana Saat Ini */}
+                <div className="group">
+                  <label className="block text-xs sm:text-sm font-bold text-slate-700 mb-2 sm:mb-3">
+                    Dana Saat Ini
+                  </label>
 
-                <input
-                  className="w-full bg-white border border-slate-200 rounded-xl py-2.5 sm:py-3 pl-21 sm:pl-28 pr-3 sm:pr-4 text-slate-900 font-bold text-base sm:text-lg focus:outline-none focus:border-[#2b4eff] transition-colors"
-                  onChange={handleCurrencyChange}
-                  value={form.uang_pangkal ? formatRupiah(form.uang_pangkal) : ""}
-                  name="uang_pangkal"
-                  type="text"
-                  inputMode="numeric"
-                  placeholder="20.000.000"
-                />
+                  <div className="relative flex items-center shadow-sm rounded-xl transition-all focus-within:shadow-lg focus-within:ring-2 focus-within:ring-[#2b4eff]/20">
+                    <span className="absolute left-3 text-slate-400 font-semibold sm:border-r sm:borderslate-200 pr-2 sm:pr-3 py-1 text-sm sm:text-base">
+                      Rp
+                    </span>
+
+                    <input
+                      className="w-full bg-white border border-slate-200 rounded-xl py-2.5 sm:py-3 pl-9  md:pl-15 pr-3 sm:pr-4 text-slate-900 font-bold text-sm sm:text-lg focus:outline-none focus:border-[#2b4eff] transition-colors"
+                      onChange={handleCurrencyChange}
+                      value={form.dana_saat_ini ? formatRupiah(form.dana_saat_ini) : ""}
+                      name="dana_saat_ini"
+                      type="text"
+                      inputMode="numeric"
+                      placeholder="20.000.000"
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
-          </form>
+
+              <button
+                className={`w-full py-2.5 sm:py-3  ${isFormValid ? "bg-[#2b4eff] hover:bg-[#203bbf]" : "bg-gray-400 cursor-not-allowed"} text-white rounded-xl font-bold text-base sm:text-lg shadow-lg shadow-[#2b4eff]/20 transition-all active:scale-[0.98] cursor-pointer`}
+                type="button"
+                onClick={handleButton}
+                disabled={!isFormValid}
+              >
+                Hitung Sekarang
+              </button>
+            </form>
+          </div>
         </section>
-        <section className="border">RESULT</section>
+
+        {/* Result Section */}
+        <section className="p-5 lg:pl-0  w-full lg:w-5/8 flex justify-center">
+          <div className="w-full max-w-180 lg:max-w-none  flex flex-col lg:justify-between xl:justify-start space-y-3 lg:space-y-0 xl:space-y-4">
+            {/* Hero Result */}
+            <div className="bg-white rounded-xl sm:rounded-2xl lg:rounded-xl p-5 sm:p-6 lg:p-4 shadow-sm border border-slate-100">
+              <div className="flex items-center justify-between mb-2 sm:mb-3 lg:mb-2">
+                <h3 className="text-slate-500 text-[10px] sm:text-xs lg:text-[10px] font-bold uppercase tracking-widest">
+                  Target Dana Pensiun
+                </h3>
+                <div className="text-[10px] sm:text-xs lg:text-[10px] font-semibold text-[#2b4eff] bg-[#2b4eff]/10 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full">
+                  30 Tahun Lagi
+                </div>
+              </div>
+
+              <div className="flex items-baseline gap-2 sm:gap-3 lg:gap-2">
+                <span className="text-lg sm:text-xl lg:text-lg font-bold text-slate-400">Rp</span>
+                <span className="text-2xl sm:text-3xl lg:text-2xl xl:text-3xl font-extrabold tracking-tight text-slate-900 leading-none">
+                  5.000.000.000
+                </span>
+              </div>
+
+              <p className="mt-2 sm:mt-3 lg:mt-2 text-xs sm:text-sm lg:text-xs text-slate-500">
+                Estimasi kebutuhan total agar biaya pendidikan masa depan tercapai.
+              </p>
+
+              <div className="mt-3 sm:mt-4 lg:mt-3">
+                <div className="flex justify-between text-[10px] sm:text-xs lg:text-[10px] text-slate-500 mb-1.5 lg:mb-1">
+                  <span>Dana Saat Ini</span>
+                  <span>20%</span>
+                </div>
+                <div className="h-2 sm:h-3 lg:h-2 bg-slate-100 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-[#2b4eff] rounded-full transition-all duration-500"
+                    style={{ width: `20%` }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Rincian Kebutuhan & Sisa Target */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 lg:gap-3">
+              <div className="border rounded-xl sm:rounded-2xl lg:rounded-xl p-5 sm:p-6 lg:p-4 bg-white border-slate-100 shadow-sm">
+                <h1 className="font-bold text-md sm:text-lg lg:text-sm mb-2 lg:mb-2">Rincian Kebutuhan Masa Depan</h1>
+
+                <div className="flex gap-2.5 lg:gap-2">
+                  <div className="flex flex-col flex-1 ring-2 ring-slate-300/30 shadow-md px-3 py-2.5 lg:py-2 rounded-xl bg-slate-100">
+                    <h1 className="text-xs font-bold tracking-wide text-gray-500 mb-3">UANG PANGKAL</h1>
+                    <p className="text-xl lg:text-xl font-extrabold tracking-wide">Rp 56.8jt</p>
+                  </div>
+
+                  <div className="flex flex-col flex-1 ring-2 ring-slate-300/30 shadow-md px-3 py-2.5 lg:py-2 rounded-xl bg-slate-100">
+                    <h1 className="text-xs font-bold tracking-wide text-gray-500 mb-3">TOTAL SPP</h1>
+                    <p className="text-xl lg:text-xl font-extrabold tracking-wide">Rp 189.2jt</p>
+                  </div>
+                </div>
+
+                <div className="flex justify-between items-center mt-5 lg:mt-4">
+                  <p className="text-xs lg:text-sm text-gray-600">Durasi Pendidikan</p>
+                  <p className="text-sm lg:text-sm font-bold">4 Tahun (8 Semester)</p>
+                </div>
+              </div>
+
+              <div className="border rounded-xl sm:rounded-2xl lg:rounded-xl p-5 sm:p-6 lg:p-4 bg-white border-slate-100 shadow-sm flex flex-col gap-3 sm:gap-4 lg:gap-0 md:justify-between">
+                <div>
+                  <h1 className="font-bold text-md sm:text-lg lg:text-sm mb-1 lg:mb-0.5">Sisa Target Dana</h1>
+                  <p className="text-xs sm:text-sm lg:text-[10px] text-slate-500 w-8/10 sm:w-full">
+                    Jumlah kekurangan yang harus dipenuhi dalam periode investasi.
+                  </p>
+                </div>
+
+                <h1 className="text-2xl sm:text-3xl lg:text-xl font-bold">Rp 11.220.000.000</h1>
+              </div>
+            </div>
+
+            {/* Risk Profile */}
+            <div className="bg-white rounded-xl sm:rounded-2xl lg:rounded-xl p-5 sm:p-6 lg:p-4 shadow-sm border border-slate-100 select-none">
+              <h3 className="text-base sm:text-lg lg:text-sm font-bold text-slate-900 mb-3 sm:mb-4 lg:mb-2.5">
+                Rekomendasi Tabungan Bulanan
+              </h3>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 lg:gap-2.5">
+                <div className="border border-slate-200 hover:border-[#2b4eff] rounded-xl p-4 sm:p-5 lg:p-3 shadow-md hover:ring-4 hover:ring-[#2b4eff]/10 transition-all duration-200">
+                  <p className="text-[10px] sm:text-xs lg:text-[9px] uppercase tracking-widest text-slate-500 mb-1 sm:mb-2 lg:mb-1">
+                    Konservatif
+                  </p>
+
+                  <p className="text-base sm:text-lg lg:text-sm font-bold text-slate-900 mb-0.5 sm:mb-1">
+                    Rp 5.5jt – 6.6jt
+                  </p>
+
+                  <p className="text-[10px] sm:text-xs lg:text-[9px] text-slate-500">Target return 5% – 6% per tahun</p>
+                </div>
+
+                <div className="border border-slate-200 hover:border-[#2b4eff] rounded-xl p-4 sm:p-5 lg:p-3 shadow-md hover:ring-4 hover:ring-[#2b4eff]/10 transition-all duration-200">
+                  <p className="text-[10px] sm:text-xs lg:text-[9px] uppercase font-extrabold tracking-widest text-[#2b4eff] mb-1 sm:mb-2 lg:mb-1">
+                    Moderat
+                  </p>
+                  <p className="text-base sm:text-lg lg:text-sm font-bold text-slate-900 mb-0.5 sm:mb-1">
+                    Rp 5.5jt – 6.6jt
+                  </p>
+                  <p className="text-[10px] sm:text-xs lg:text-[9px] text-slate-500">
+                    Target return 7% – 10% per tahun
+                  </p>
+                </div>
+
+                <div className="border border-slate-200 hover:border-[#2b4eff] rounded-xl p-4 sm:p-5 lg:p-3 shadow-md hover:ring-4 hover:ring-[#2b4eff]/10 transition-all duration-200">
+                  <p className="text-[10px] sm:text-xs lg:text-[9px] uppercase tracking-widest text-slate-500 mb-1 sm:mb-2 lg:mb-1">
+                    Agresif
+                  </p>
+                  <p className="text-base sm:text-lg lg:text-sm font-bold text-slate-900 mb-0.5 sm:mb-1">
+                    Rp 5.5jt – 6.6jt
+                  </p>
+                  <p className="text-[10px] sm:text-xs lg:text-[9px] text-slate-500">
+                    Target return 11% – 15% per tahun
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
     </>
   );
