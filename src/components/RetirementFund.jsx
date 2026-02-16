@@ -10,165 +10,153 @@ import {
 import { useState } from "react";
 
 const RetirementFund = () => {
-  const MAX_DANA = 100_000_000_000;
-  const MAX_PENGELUARAN = 1_000_000_000;
-  const MAX_USIA = 100;
-  const MIN_USIA = 15;
+  const MAX_RETIREMENT_FUND = 100_000_000_000;
+  const MAX_MONTHLY_EXPENSES = 1_000_000_000;
+  const MAX_AGE = 100;
+  const MIN_AGE = 15;
+  const DEFAULT_RETIREMENT_AGE_OFFSET = 10;
 
-  const [form, setForm] = useState({
-    dana: "",
-    pengeluaran: "",
-    usiaSekarang: "",
-    usiaPensiun: "",
-    inflasi: "",
+  const [formData, setFormData] = useState({
+    currentFunds: "",
+    monthlyExpenses: "",
+    currentAge: "",
+    retirementAge: "",
+    inflationRate: "",
   });
 
-  const [result, setResult] = useState(null);
+  const [calculationResult, setCalculationResult] = useState(null);
+  const [isRetirementAgeAutoFilled, setIsRetirementAgeAutoFilled] = useState(true);
 
-  const [autoFilledPensiun, setAutoFilledPensiun] = useState(true);
-
-  const handleCurrencyChange = (e) => {
+  const handleCurrencyInput = (e) => {
     const { name, value } = e.target;
-    let numeric = Number(value.replace(/\D/g, ""));
+    const numericValue = Number(value.replace(/\D/g, ""));
 
-    if (name === "pengeluaran") {
-      numeric = Math.min(numeric, MAX_PENGELUARAN);
-    }
+    const maxLimit = name === "monthlyExpenses" ? MAX_MONTHLY_EXPENSES : MAX_RETIREMENT_FUND;
+    const validatedValue = Math.min(numericValue, maxLimit);
 
-    if (name === "dana") {
-      numeric = Math.min(numeric, MAX_DANA);
-    }
-
-    setForm((prev) => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: numeric,
+      [name]: validatedValue,
     }));
   };
 
-  const handleUsiaSekarang = (e) => {
-    const raw = e.target.value.replace(/\D/g, "");
+  const handleCurrentAgeInput = (e) => {
+    const numericValue = e.target.value.replace(/\D/g, "");
 
-    setForm((prev) => {
-      let pensiun = prev.usiaPensiun;
+    setFormData((prev) => {
+      let updatedRetirementAge = prev.retirementAge;
 
-      if (autoFilledPensiun && raw !== "") {
-        pensiun = String(Number(raw) + 10);
+      if (isRetirementAgeAutoFilled && numericValue !== "") {
+        updatedRetirementAge = String(Number(numericValue) + DEFAULT_RETIREMENT_AGE_OFFSET);
       }
 
       return {
         ...prev,
-        usiaSekarang: raw,
-        usiaPensiun: pensiun,
+        currentAge: numericValue,
+        retirementAge: updatedRetirementAge,
       };
     });
   };
 
-  const validateUsiaSekarang = () => {
-    setForm((prev) => {
-      if (!prev.usiaSekarang) return prev;
+  const validateCurrentAge = () => {
+    setFormData((prev) => {
+      if (!prev.currentAge) return prev;
 
-      let usia = Number(prev.usiaSekarang);
-
-      if (usia < MIN_USIA) usia = MIN_USIA;
-      if (usia > MAX_USIA) usia = MAX_USIA;
+      const validatedAge = Math.max(MIN_AGE, Math.min(Number(prev.currentAge), MAX_AGE));
 
       return {
         ...prev,
-        usiaSekarang: String(usia),
+        currentAge: String(validatedAge),
       };
     });
   };
 
-  const handleUsiaPensiun = (e) => {
-    const raw = e.target.value.replace(/\D/g, "");
+  const handleRetirementAgeInput = (e) => {
+    const numericValue = e.target.value.replace(/\D/g, "");
 
-    setAutoFilledPensiun(false);
+    setIsRetirementAgeAutoFilled(false);
 
-    setForm((prev) => ({
+    setFormData((prev) => ({
       ...prev,
-      usiaPensiun: raw,
+      retirementAge: numericValue,
     }));
   };
 
-  const validateUsiaPensiun = () => {
-    setForm((prev) => {
-      if (!prev.usiaPensiun) return prev;
+  const validateRetirementAge = () => {
+    setFormData((prev) => {
+      if (!prev.retirementAge) return prev;
 
-      let pensiun = Number(prev.usiaPensiun);
-      const usiaSekarang = Number(prev.usiaSekarang);
+      const currentAge = Number(prev.currentAge);
+      let retirementAge = Number(prev.retirementAge);
 
-      if (pensiun <= usiaSekarang) {
-        pensiun = usiaSekarang + 1;
+      if (retirementAge <= currentAge) {
+        retirementAge = currentAge + 1;
       }
 
-      if (pensiun > MAX_USIA) {
-        pensiun = MAX_USIA;
+      if (retirementAge > MAX_AGE) {
+        retirementAge = MAX_AGE;
       }
 
       return {
         ...prev,
-        usiaPensiun: String(pensiun),
+        retirementAge: String(retirementAge),
       };
     });
   };
 
-  const handleInflasi = (e) => {
-    const raw = e.target.value.replace(/\D/g, "");
+  const handleInflationInput = (e) => {
+    const numericValue = e.target.value.replace(/\D/g, "");
 
-    setForm((prev) => ({
+    setFormData((prev) => ({
       ...prev,
-      inflasi: raw,
+      inflationRate: numericValue,
     }));
   };
 
-  const validateInflasi = () => {
-    setForm((prev) => {
-      if (!prev.inflasi) return prev;
+  const validateInflation = () => {
+    setFormData((prev) => {
+      if (!prev.inflationRate) return prev;
 
-      let value = Number(prev.inflasi);
-
-      if (value > 100) value = 100;
+      const validatedRate = Math.min(Number(prev.inflationRate), 100);
 
       return {
         ...prev,
-        inflasi: String(value),
+        inflationRate: String(validatedRate),
       };
     });
   };
 
-  const isFormValid =
-    form.usiaSekarang !== "" &&
-    form.usiaPensiun !== "" &&
-    form.pengeluaran !== "" &&
-    form.dana !== "" &&
-    form.inflasi !== "";
+  const isFormComplete =
+    formData.currentAge !== "" &&
+    formData.retirementAge !== "" &&
+    formData.monthlyExpenses !== "" &&
+    formData.currentFunds !== "" &&
+    formData.inflationRate !== "";
 
-  const handleButton = () => {
-    const selisih = hitungSelisihUsia(Number(form.usiaSekarang), Number(form.usiaPensiun));
+  const calculateRetirementPlan = () => {
+    const yearsToRetirement = hitungSelisihUsia(Number(formData.currentAge), Number(formData.retirementAge));
 
-    const dana = hitungDanaPensiun(
-      Number(form.usiaSekarang),
-      Number(form.usiaPensiun),
-      Number(form.inflasi || 0),
-      form.pengeluaran,
+    const totalRetirementFund = hitungDanaPensiun(
+      Number(formData.currentAge),
+      Number(formData.retirementAge),
+      Number(formData.inflationRate || 0),
+      formData.monthlyExpenses,
     );
 
-    const progress = hitungProgress(dana, form.dana);
-    const sisaTargetDana = dana - form.dana;
+    const fundingProgress = hitungProgress(totalRetirementFund, formData.currentFunds);
+    const remainingFunds = Math.max(0, totalRetirementFund - formData.currentFunds);
 
-    setResult({
-      selisihUsia: selisih,
-      danaPensiun: dana,
-      progress: progress,
-      sisaTargetDana: sisaTargetDana,
-      konservatif_lima: hitungTabunganBulanan(sisaTargetDana, 5, selisih),
-      konservatif_enam: hitungTabunganBulanan(sisaTargetDana, 6, selisih),
-
-      konservatif_tujuh: hitungTabunganBulanan(sisaTargetDana, 7, selisih),
-      konservatif_sepuluh: hitungTabunganBulanan(sisaTargetDana, 10, selisih),
-
-      konservatif_sebelas: hitungTabunganBulanan(sisaTargetDana, 11, selisih),
-      konservatif_limabelas: hitungTabunganBulanan(sisaTargetDana, 15, selisih),
+    setCalculationResult({
+      yearsToRetirement,
+      totalRetirementFund,
+      progressPercentage: fundingProgress,
+      remainingFunds,
+      conservativeLow: hitungTabunganBulanan(remainingFunds, 5, yearsToRetirement),
+      conservativeHigh: hitungTabunganBulanan(remainingFunds, 6, yearsToRetirement),
+      moderateLow: hitungTabunganBulanan(remainingFunds, 7, yearsToRetirement),
+      moderateHigh: hitungTabunganBulanan(remainingFunds, 10, yearsToRetirement),
+      aggressiveLow: hitungTabunganBulanan(remainingFunds, 11, yearsToRetirement),
+      aggressiveHigh: hitungTabunganBulanan(remainingFunds, 15, yearsToRetirement),
     });
   };
 
@@ -177,7 +165,7 @@ const RetirementFund = () => {
       <title>Kalkulator Pensiun</title>
 
       <main
-        className={`flex flex-col lg:flex-row items-center ${!result ? "lg:justify-center" : ""} min-h-full p-5 lg:py-0 gap-5 bg-gray-200`}
+        className={`flex flex-col lg:flex-row items-center ${!calculationResult ? "lg:justify-center" : ""} min-h-full p-5 lg:py-0 gap-5 bg-gray-200`}
       >
         {/* FORM SECTION */}
         <section className="w-full max-w-180 lg:w-1/3 h-full bg-white rounded-xl p-4 sm:p-6 lg:p-10">
@@ -200,26 +188,27 @@ const RetirementFund = () => {
 
               <div className="relative flex items-center shadow-sm rounded-xl transition-all focus-within:shadow-lg focus-within:ring-2 focus-within:ring-[#2b4eff]/20">
                 <div className="absolute left-3 sm:left-4 w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-slate-50 text-slate-400 flex items-center justify-center">
-                  <Wallet className="" />
+                  <Wallet className="h-4 w-4 sm:h-5 sm:w-5" />
                 </div>
 
-                <span className="absolute left-12 sm:left-16 text-slate-400 font-semibold border-r borderslate-200 pr-2 sm:pr-3 py-1 text-sm sm:text-base">
+                <span className="absolute left-12 sm:left-16 text-slate-400 font-semibold border-r border-slate-200 pr-2 sm:pr-3 py-1 text-sm sm:text-base">
                   Rp
                 </span>
 
                 <input
-                  className="w-full bg-white border border-slate-200 rounded-xl py-2.5 sm:py-3 pl-21 sm:pl-28 pr-3 sm:pr-4 text-slate-900 font-bold text-base sm:text-lg focus:outline-none focus:border-[#2b4eff] transition-colors"
+                  name="currentFunds"
                   type="text"
                   inputMode="numeric"
-                  name="dana"
-                  value={form.dana ? formatRupiah(form.dana) : ""}
-                  onChange={handleCurrencyChange}
-                  placeholder="500.000.000"
+                  value={formData.currentFunds ? formatRupiah(formData.currentFunds) : ""}
+                  onChange={handleCurrencyInput}
+                  placeholder="50.000.000"
+                  className="w-full bg-white border border-slate-200 rounded-xl py-2.5 sm:py-3 pl-20 sm:pl-28 pr-3 sm:pr-4 text-slate-900 font-bold text-base sm:text-lg focus:outline-none focus:border-[#2b4eff] transition-colors"
+                  required
                 />
               </div>
             </div>
 
-            {/* Usia */}
+            {/* Usia Sekarang & Usia Pensiun */}
             <div className="grid grid-cols-2 gap-3 sm:gap-4">
               <div className="group">
                 <label className="block text-xs sm:text-sm font-bold text-slate-700 mb-2 sm:mb-3">Usia Sekarang</label>
@@ -227,18 +216,16 @@ const RetirementFund = () => {
                   <div className="absolute left-3 sm:left-4 text-slate-400">
                     <User className="h-4 w-4 sm:h-5 sm:w-5" />
                   </div>
-
                   <input
                     className="w-full bg-white border border-slate-200 focus:border-[#2b4eff] rounded-xl py-2.5 sm:py-3 pl-10 sm:pl-12 pr-14 sm:pr-16 text-slate-900 font-bold text-base sm:text-lg focus:outline-none transition-colors"
                     type="text"
                     inputMode="numeric"
-                    value={form.usiaSekarang}
-                    onChange={handleUsiaSekarang}
-                    onBlur={validateUsiaSekarang}
+                    value={formData.currentAge}
+                    onChange={handleCurrentAgeInput}
+                    onBlur={validateCurrentAge}
                     placeholder="30"
                     required
                   />
-
                   <span className="absolute right-2 sm:right-4 text-slate-400 text-xs sm:text-sm font-semibold bg-slate-50 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded">
                     Tahun
                   </span>
@@ -255,9 +242,9 @@ const RetirementFund = () => {
                     className="w-full bg-white border border-slate-200 focus:border-[#2b4eff] rounded-xl py-2.5 sm:py-3 pl-10 sm:pl-12 pr-14 sm:pr-16 text-slate-900 font-bold text-base sm:text-lg focus:outline-none transition-colors"
                     type="text"
                     inputMode="numeric"
-                    value={form.usiaPensiun}
-                    onChange={handleUsiaPensiun}
-                    onBlur={validateUsiaPensiun}
+                    value={formData.retirementAge}
+                    onChange={handleRetirementAgeInput}
+                    onBlur={validateRetirementAge}
                     placeholder="55"
                     required
                   />
@@ -283,11 +270,11 @@ const RetirementFund = () => {
                 </span>
 
                 <input
-                  name="pengeluaran"
+                  name="monthlyExpenses"
                   type="text"
                   inputMode="numeric"
-                  value={form.pengeluaran ? formatRupiah(form.pengeluaran) : ""}
-                  onChange={handleCurrencyChange}
+                  value={formData.monthlyExpenses ? formatRupiah(formData.monthlyExpenses) : ""}
+                  onChange={handleCurrencyInput}
                   placeholder="5.000.000"
                   className="w-full bg-white border border-slate-200 rounded-xl py-2.5 sm:py-3 pl-20 sm:pl-28 pr-3 sm:pr-4 text-slate-900 font-bold text-base sm:text-lg focus:outline-none focus:border-[#2b4eff] transition-colors"
                   required
@@ -311,9 +298,9 @@ const RetirementFund = () => {
                   className="w-full bg-white border border-slate-200 rounded-xl py-2.5 sm:py-3 pl-10 sm:pl-12 pr-10 sm:pr-12 text-slate-900 font-bold text-base sm:text-lg focus:outline-none focus:border-[#2b4eff] transition-colors"
                   type="text"
                   inputMode="numeric"
-                  value={form.inflasi}
-                  onChange={handleInflasi}
-                  onBlur={validateInflasi}
+                  value={formData.inflationRate}
+                  onChange={handleInflationInput}
+                  onBlur={validateInflation}
                   placeholder="5"
                   required
                 />
@@ -322,10 +309,10 @@ const RetirementFund = () => {
             </div>
 
             <button
-              className={`w-full py-2.5 sm:py-3  ${isFormValid ? "bg-[#2b4eff] hover:bg-[#203bbf]" : "bg-gray-400 cursor-not-allowed"} text-white rounded-xl font-bold text-base sm:text-lg shadow-lg shadow-[#2b4eff]/20 transition-all active:scale-[0.98] cursor-pointer`}
+              className={`w-full py-2.5 sm:py-3  ${isFormComplete ? "bg-[#2b4eff] hover:bg-[#203bbf]" : "bg-gray-400 cursor-not-allowed"} text-white rounded-xl font-bold text-base sm:text-lg shadow-lg shadow-[#2b4eff]/20 transition-all active:scale-[0.98] cursor-pointer`}
               type="button"
-              onClick={handleButton}
-              disabled={!isFormValid}
+              onClick={calculateRetirementPlan}
+              disabled={!isFormComplete}
             >
               Hitung Sekarang
             </button>
@@ -333,7 +320,7 @@ const RetirementFund = () => {
         </section>
 
         {/* RESULT SECTION */}
-        {result && (
+        {calculationResult && (
           <section className="w-full lg:w-2/3 h-full flex flex-col rounded-xl animate-slide-in">
             <div className="w-full space-y-4 sm:space-y-7">
               {/* Hero Target */}
@@ -343,14 +330,14 @@ const RetirementFund = () => {
                     Target Dana Pensiun
                   </h3>
                   <div className="text-[10px] sm:text-xs font-semibold text-[#2b4eff] bg-[#2b4eff]/10 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full">
-                    {result.selisihUsia} Tahun Lagi
+                    {calculationResult.yearsToRetirement} Tahun Lagi
                   </div>
                 </div>
 
                 <div className="flex items-baseline gap-2 sm:gap-3">
                   <span className="text-lg sm:text-xl lg:text-2xl font-bold text-slate-400">Rp</span>
                   <span className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-extrabold tracking-tight text-slate-900 leading-none">
-                    {formatRupiah(result.danaPensiun)}
+                    {formatRupiah(calculationResult.totalRetirementFund)}
                   </span>
                 </div>
 
@@ -361,12 +348,12 @@ const RetirementFund = () => {
                 <div className="mt-4 sm:mt-6">
                   <div className="flex justify-between text-[10px] sm:text-xs text-slate-500 mb-2">
                     <span>Dana Saat Ini</span>
-                    <span>{result.progress.toFixed(2)}%</span>
+                    <span>{calculationResult.progressPercentage.toFixed(2)}%</span>
                   </div>
                   <div className="h-2 sm:h-3 bg-slate-100 rounded-full overflow-hidden">
                     <div
                       className="h-full bg-[#2b4eff]  rounded-full transition-all duration-500"
-                      style={{ width: `${result.progress}%` }}
+                      style={{ width: `${calculationResult.progressPercentage}%` }}
                     ></div>
                   </div>
                 </div>
@@ -379,10 +366,10 @@ const RetirementFund = () => {
                     Sisa Target Dana
                   </h3>
                   <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-900 truncate">
-                    {formatRupiah(result.sisaTargetDana)}
+                    Rp {formatRupiah(calculationResult.remainingFunds)}
                   </div>
                   <p className="text-xs sm:text-sm text-slate-500 mt-0.5 sm:mt-1">
-                    Selisih yang perlu kamu akumulasi dalam {result.selisihUsia} tahun.
+                    Selisih yang perlu kamu akumulasi dalam {calculationResult.yearsToRetirement} tahun.
                   </p>
                 </div>
                 <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-[#2b4eff]/10 flex items-center justify-center text-[#2b4eff] shrink-0">
@@ -403,7 +390,8 @@ const RetirementFund = () => {
                     </p>
 
                     <p className="text-base sm:text-lg font-bold text-slate-900 mb-0.5 sm:mb-1">
-                      Rp {formatShort(result.konservatif_enam)} – {formatShort(result.konservatif_lima)}
+                      Rp {formatShort(calculationResult.conservativeHigh)} –{" "}
+                      {formatShort(calculationResult.conservativeLow)}
                     </p>
 
                     <p className="text-[10px] sm:text-xs text-slate-500">Target return 5% – 6% per tahun</p>
@@ -414,7 +402,7 @@ const RetirementFund = () => {
                       Moderat
                     </p>
                     <p className="text-base sm:text-lg font-bold text-slate-900 mb-0.5 sm:mb-1">
-                      Rp {formatShort(result.konservatif_sepuluh)} – {formatShort(result.konservatif_tujuh)}
+                      Rp {formatShort(calculationResult.moderateHigh)} – {formatShort(calculationResult.moderateLow)}
                     </p>
                     <p className="text-[10px] sm:text-xs text-slate-500">Target return 7% – 10% per tahun</p>
                   </div>
@@ -424,7 +412,8 @@ const RetirementFund = () => {
                       Agresif
                     </p>
                     <p className="text-base sm:text-lg font-bold text-slate-900 mb-0.5 sm:mb-1">
-                      Rp {formatShort(result.konservatif_limabelas)} – {formatShort(result.konservatif_sebelas)}
+                      Rp {formatShort(calculationResult.aggressiveHigh)} –{" "}
+                      {formatShort(calculationResult.aggressiveLow)}
                     </p>
                     <p className="text-[10px] sm:text-xs text-slate-500">Target return 11% – 15% per tahun</p>
                   </div>

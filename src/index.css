@@ -75,3 +75,18 @@ input[type="number"] {
                         "text-primary": "#1e293b",
                         "text-secondary": "#64748b",
                     }, */
+
+/* export const DURASI_PENDIDIKAN = {
+  SD: 6,
+  SMP: 3,
+  SMA: 3,
+  D1: 1,
+  D2: 2,
+  D3: 3,
+  D4: 4,
+  S1: 4,
+  S2: 2,
+  S3: 3
+}; */
+
+/* const durasiTahun = DURASI_PENDIDIKAN[form.jenjang] || 0; */
